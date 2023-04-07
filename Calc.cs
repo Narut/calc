@@ -16,6 +16,10 @@ namespace nCalculator
         {
             All_Equation.Append(inputData);
         }
+        public static void SetData(string inputData)
+        {
+            All_Equation = new StringBuilder(inputData);
+        }
         public static string Calculate()
         {
             string allEq = All_Equation.ToString();

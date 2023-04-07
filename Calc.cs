@@ -18,14 +18,13 @@ namespace nCalculator
         }
         public static string Calculate()
         {
-            All_Equation = new StringBuilder(ConvertAllToDec(All_Equation.ToString()).ToString());
             string allEq = All_Equation.ToString();
             //string pattern = @"([\d]{1,})([-*+/]){1,}([\d]{1,})";
-            string pattern1 = @"([box.\d]{1,})([*/]){1,}([box.\d]{1,})";
-            string pattern2 = @"([box.\d]{1,})([-+]){1,}([box.\d]{1,})";
+            string pattern1 = @"([box.\dA-Fa-f]{1,})([*/]){1,}([box.\dA-Fa-f]{1,})";
+            string pattern2 = @"([box.\dA-Fa-f]{1,})([-+]){1,}([box.\dA-Fa-f]{1,})";
             allEq = RegExProcess(allEq,pattern1);
             allEq = RegExProcess(allEq,pattern2);
-
+            allEq = ConvertAllToDec(allEq);
             return allEq;
         }
         private static string RegExProcess(string allEq, string pattern)
@@ -41,9 +40,9 @@ namespace nCalculator
                 {
                     GroupCollection groups = match.Groups;
                     string matchText = groups[0].Value;
-                    double num1 = ConvertAllToDec(groups[1].Value);
+                    double num1 = Convert.ToDouble(ConvertAllToDec(groups[1].Value));
                     string operand = groups[2].Value;
-                    double num2 = ConvertAllToDec(groups[3].Value);
+                    double num2 = Convert.ToDouble(ConvertAllToDec(groups[3].Value));
 
                     if (operand.Equals("*")) val = (num1 * num2).ToString();
                     else if (operand.Equals("/")) val = (num1 / num2).ToString();
@@ -58,12 +57,12 @@ namespace nCalculator
             }
             return allEq;
         }
-        private static double ConvertAllToDec(string input)
+        private static string ConvertAllToDec(string input)
         {
-            if (input.IndexOf("0x") == 0) return Convert.ToInt64(input.Replace("0x",""), 16);
-            else if (input.IndexOf("0b") == 0) return Convert.ToInt64(input.Replace("0b",""), 2);
-            else if (input.IndexOf("0o") == 0) return Convert.ToInt64(input.Replace("0o", ""), 8);
-            else return Convert.ToDouble(input);
+            if (input.IndexOf("0x") == 0)      return Convert.ToInt64(input.Replace("0x", ""), 16).ToString();
+            else if (input.IndexOf("0b") == 0) return Convert.ToInt64(input.Replace("0b", ""),  2).ToString();
+            else if (input.IndexOf("0o") == 0) return Convert.ToInt64(input.Replace("0o", ""),  8).ToString();
+            else return input;
         }
     }
 }
